@@ -11,17 +11,17 @@ namespace NeuralNetworkTest
     {
         static void Main(string[] args)
         {
-            var nn = new NeuralNetwork.NeuralNetwork(Equations.Sigmoid, 1, 2, 4, 8, 16, 32, 1);
+            var nn = new NeuralNetwork.NeuralNetwork(Equations.Linear, 1, 2, 4, 8, 16, 32, 1);
             //set weights
             foreach (var layer in nn.layers)
             {
-                foreach (var neuron in layer.Neurons)
+                for (int i = 0; i < layer.Weights.GetLength(0); i++)
                 {
-                    neuron.Bias = 0;
-                    for (int i = 0; i < neuron.Weights.Length; i++)
+                    for (int j = 0; j < layer.Weights.GetLength(1); j++)
                     {
-                        neuron.Weights[i] = 1;
+                        layer.Weights[i, j] = 1;
                     }
+                    layer.Biases[i] = 0;
                 }
             }
 

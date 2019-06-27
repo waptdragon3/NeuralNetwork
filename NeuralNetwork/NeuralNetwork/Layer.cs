@@ -7,18 +7,18 @@ namespace NeuralNetwork
     /// </summary>
     public class Layer
     {
-        public Neuron[] Neurons { get; private set; }
-
+        public double[,] Weights { get; private set; }
+        public double[] Biases { get; private set; }
+        Func<double, double> activationFunction;
         internal Layer(System.Func<double, double> activationFunction, int size, int prevSize = 0)
         {
-            this.Neurons = new Neuron[size];
-            for (int i = 0; i < size; i++)
-            {
-                this.Neurons[i] = new Neuron(activationFunction, prevSize);
-            }
+            this.activationFunction = activationFunction;
+            Weights = new double[size, prevSize];
+            Biases = new double[size];
         }
+        internal bool IsStart = false;
 
-        public int Length => Neurons.Length;
+        public int Length => Biases.Length;
 
         /// <summary>
         /// 
@@ -27,9 +27,24 @@ namespace NeuralNetwork
         /// <returns></returns>
         internal double[] Compute(double[] inputs)
         {
-            double[] res = new double[Neurons.Length];
-            for (int i = 0; i < res.Length; i++)
-                res[i] = Neurons[i].Compute(inputs);
+            if (IsStart) return inputs;
+            double[] v = mult(Weights, inputs);
+            for (int i = 0; i < v.Length; i++)
+                v[i] = activationFunction(v[i]+Biases[i]);
+            return v;
+
+        }
+
+        private double[] mult(double[,] w, double[] a)
+        {
+            double[] res = new double[w.GetLength(0)];
+            for(int i = 0; i < w.GetLength(0); i++)
+            {
+                for (int j = 0; j < w.GetLength(1); j++)
+                {
+                    res[i] += w[i, j] * a[j];
+                }
+            }
             return res;
         }
     }

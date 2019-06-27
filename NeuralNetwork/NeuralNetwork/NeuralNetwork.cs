@@ -14,7 +14,7 @@ namespace NeuralNetwork
             InputCount = inputSize;
             OutputCount = layersCount[layersCount.Length - 1];
             layers = new Layer[layersCount.Length + 1];
-            layers[0] = new Layer(activationFunction, inputSize);
+            layers[0] = new Layer(activationFunction, inputSize) { IsStart = true };
             layers[1] = new Layer(activationFunction, layersCount[1], inputSize);
             for (int i = 2; i < layersCount.Length+1; i++)
             {
@@ -25,10 +25,8 @@ namespace NeuralNetwork
         public double[] Compute(double[] inputs)
         {
             if (inputs.Length != InputCount) throw new ArgumentOutOfRangeException(nameof(inputs), "The length of the input array does not equal the input size of the Network");
-            double[] res = new double[inputs.Length];
-            //Handle first layer separately
-            for (int i = 0; i < inputs.Length; i++) res[i] = layers[0].Neurons[i].activationFunction(inputs[i]);
-            for (int i = 1; i < layers.Length; i++)
+            double[] res = inputs;
+            for (int i = 0; i < layers.Length; i++)
             {
                 Console.WriteLine(i + " = " + res[0]);
                 res = layers[i].Compute(res);
