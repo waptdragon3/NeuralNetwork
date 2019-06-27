@@ -11,7 +11,7 @@ namespace NeuralNetworkTest
     {
         static void Main(string[] args)
         {
-            var nn = new NeuralNetwork.NeuralNetwork(func, 1, 2, 2, 2, 2, 1);
+            var nn = new NeuralNetwork.NeuralNetwork(Equations.Sigmoid, 1, 2, 4, 8, 16, 32, 1);
             //set weights
             foreach (var layer in nn.layers)
             {
